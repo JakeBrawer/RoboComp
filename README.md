@@ -1,3 +1,3 @@
 def calculateMeanBlobs():
     camera_open()
-    s
+    seeeee
