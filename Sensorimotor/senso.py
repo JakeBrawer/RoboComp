@@ -17,13 +17,18 @@ IR_thresh = 500
 tic = 50
 
 while(True):
-	msleep(tic)
+	#if there's something left, turn right
 	if analog10(IR_left) > thresh:
 		turn_right()
+	#else if there's something right, turn left
 	elif analog10(IR_right) > thresh:
 		turn_left()
+	#else go forward
 	else:
 		fwd()
+		
+	#do selected action for tic num of milliseconds
+	msleep(tic)
 	
 def fwd():
 	motor(motor_left, 100)
