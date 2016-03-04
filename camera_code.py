@@ -37,6 +37,10 @@ def calculateBlackBlobs():
         num_samples -= 1
         #Sleep for 1 second. Will allow the bot to move around the room
         # and take samples
+        # NOTE: if sleep does not work, try wheel ticks
+        print "Average black blobs in sample", average_black_blobs_list
         msleep(1000)
     average_black_blob = sum(average_black_blobs_list)/float(len(average_black_blobs_list))
     stderr_black_blob = calculateStdError(average_black_blobs_list, average_black_blob)
+
+print ("Average saved black blob: %s\nStd err: %s " %  (average_black_blob, stderr_black_blob)) 
