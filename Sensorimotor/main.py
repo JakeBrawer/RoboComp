@@ -22,7 +22,7 @@ IR_thresh = 280
 #number of milliseconds between each loop
 tick = 50
 
-speed = 85u
+speed = 85
 
 
 def fwd():
@@ -46,15 +46,17 @@ def turn_left(in_place=True):
 	motor(motor_left, motor_left_vel)
 	motor(motor_right, speed)
 	
-'''
-average_black_blob = 0
-stderr_black_blob = 0
-black_channel = 0 #
-average_black_blob, stderr_black_blob = camera_code.calculateBlackBlobs()
-print "av: ", average_black_blob
-print "std: ", stderr_black_blob
+camera_open_at_res(LOW_RES)
+while(True):
+	average_black_blob = 0
+	stderr_black_blob = 0
+	black_channel = 0 #
+	average_black_blob, stderr_black_blob = camera_code.calculateBlackBlobs()
+	print "av: ", average_black_blob
+	print "std: ", stderr_black_blob
+camera_close()
 
-'''	
+'''
 while(True):
 	#this variable indicates whether or not an action runs for a specific amount of time
 	diff_time_for_action = False
@@ -77,3 +79,4 @@ while(True):
 	if not diff_time_for_action:
 		msleep(tick)
 
+'''
