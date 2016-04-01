@@ -2,6 +2,7 @@
 
 from kovan import *
 import camera_code
+import time 
 
 #numbers of the IR sensors
 IR_left = 0
@@ -26,6 +27,10 @@ speed = 85
 
 
 def fwd():
+	#added stuff
+	motor(motor_left, 0)
+	motor(motor_right, 0)
+	time.sleep(tick)
 	motor(motor_left, speed)
 	motor(motor_right, speed)
 	
@@ -45,7 +50,7 @@ def turn_left(in_place=True):
 		motor_left_vel = 40
 	motor(motor_left, motor_left_vel)
 	motor(motor_right, speed)
-	
+'''
 camera_open_at_res(LOW_RES)
 while(True):
 	average_black_blob = 0
