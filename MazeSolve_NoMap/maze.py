@@ -1,10 +1,11 @@
 # Created on Thu March 31 2016
 
 from kovan import *
+import straight_maze_movement
 
 #numbers of the IR sensors
-IR_left = 3
-IR_right = 5
+IR_left = 5
+IR_right = 3
 IR_front = 0
 
 #numbers of motor ports
@@ -16,7 +17,7 @@ IR_normalize = 0
 IR_diff_thresh = 40
 IR_thresh_collision = 480
 IR_thresh_wall = 300
-front_IR_thresh = 430#420
+front_IR_thresh = 410#420
 
 speed = 60
 speed_right = 63
@@ -65,8 +66,10 @@ def turn_left(in_place=True):
 	motor(motor_right, speed)
 def stop_left():
 	motor(motor_left, 0)
+	motor(motor_right, speed_right-5)
 def stop_right():
 	motor(motor_right, 0)
+	motor(motor_left, speed_left-5)
 def stop():
 	motor(motor_left, 0)
 	motor(motor_right, 0)
@@ -92,9 +95,8 @@ def one_eighty():
 
 ##### MAIN LOOP! ##########
 while(True):
-	#stop()
-	#msleep(tick)
 	#read the sensor vals
+	'''
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
@@ -104,8 +106,22 @@ while(True):
 				one_eighty()
 	else:
 		wobble_fwd(left_IR_val, right_IR_val, front_IR_val)
-		
-		
+	'''
+	if (something_front(front_IR_val) and wall_side(left_IR_val) 
+			and wall_side(right_IR_val)):
+				print "DEAD END"
+				one_eighty()
+	else:
+		motor(motor_right, 70)
+		motor(motor_left, 70)
+		#if we're about to hit a wall from the front, stop
+		if (front_IR_val > front_IR_thresh):
+			turn_right()
+		else:
+			stay_mid()
+	if (a_button() or b_button() or c_button()):
+		ao()
+		break
 	msleep(tick)
 
 '''

@@ -27,10 +27,6 @@ speed = 85
 
 
 def fwd():
-	#added stuff
-	motor(motor_left, 0)
-	motor(motor_right, 0)
-	time.sleep(tick)
 	motor(motor_left, speed)
 	motor(motor_right, speed)
 	
