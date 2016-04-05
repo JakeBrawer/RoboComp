@@ -24,5 +24,4 @@ def stay_mid():
 while(True):
     motor(motor_right, 70)
     motor(motor_left, 70)
-    print('hi')
     stay_mid()
