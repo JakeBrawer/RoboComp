@@ -11,91 +11,99 @@ IR_front = 0
 motor_left = 3
 motor_right = 1
 
-#threshold for the IR sensors
-IR_thresh = 280
-front_IR_thresh = 420
-left_IR_threshold = analog_et(IR_left)
-right_IR_threshold = analog_et(IR_right)
 
+IR_normalize = 0
+IR_diff_thresh = 40
+IR_thresh_collision = 480
+IR_thresh_wall = 300
+front_IR_thresh = 430#420
 
 speed = 60
-speed_right = 55
-speed_left = 55
+speed_right = 63
+speed_left = 73
 
 #number of milliseconds between each loop
-tick = 50
+tick = 30
 
-def fwd():
-	motor(motor_left, speed_left)
-	motor(motor_right, speed_right)
 	
 nudge_dec = 20
 nudge_inc = 0
+
+		
+###### SENSOR PREDICATE FUNCTIONS ######
+def something_front(front_val):
+	return front_val > front_IR_thresh
+def collision_side(val):
+	return val > IR_thresh_collision
+def wall_side(val):
+	return val > IR_thresh_wall
+
+###### MOTOR BEHAVIORS (NO SET AMT OF TIME) #######
+def fwd():
+	motor(motor_left, speed_left)
+	motor(motor_right, speed_right)
 def nudge_right():
 	motor(motor_left, speed_left+nudge_inc)
 	motor(motor_right, speed_right-nudge_dec)
 def nudge_left():
 	motor(motor_left, speed_left-nudge_dec)
 	motor(motor_right, speed_right+nudge_inc)
-	
+def turn_right(in_place=True):
+	#if in place, opposite motor goes backward
+	if in_place:
+		motor_right_vel = -1*speed
+	else:
+		motor_right_vel = 40
+	motor(motor_left, speed)
+	motor(motor_right, motor_right_vel)
+def turn_left(in_place=True):
+	if in_place:
+		motor_left_vel = -1*speed
+	else:
+		motor_left_vel = 40
+	motor(motor_left, motor_left_vel)
+	motor(motor_right, speed)
+def stop_left():
+	motor(motor_left, 0)
+def stop_right():
+	motor(motor_right, 0)
 def stop():
 	motor(motor_left, 0)
 	motor(motor_right, 0)
+def wobble_fwd(left_IR_val, right_IR_val, front_IR_val):
+	if (left_IR_val > IR_thresh_collision):
+		print "Nudge right"
+		stop_left()
+	elif (right_IR_val > IR_thresh_collision):
+		print "Nudge left"
+		stop_right()
+	else:
+		#if we're about to hit a wall from the front, stop
+		if (front_IR_val > front_IR_thresh):
+			turn_right()
+		else:
+			fwd()
 
-IR_normalize = 0
-IR_diff_thresh = 40
+##### MOTOR BEHAVIORS (SET AMT OF TIME) ######
+def one_eighty():
+	turn_left()
+	msleep(1200)
+	stop()
 
-'''
-#added stuff
-if motor_left == 0 and motor_right == 0 and not stop():
-	right_IR_threshold = right_IR_val
-	print "right_IR_threshold: ", right_IR_threshold
-	left_IR_threshold = left_IR_val
-	print "left_IR_threshold: ", left_IR_threshold
-
-init_left_IR = analog_et(IR_left)
-init_right_IR = analog_et(IR_right)
-init_IR_diff = init_left_IR - init_right_IR
-print "left_ir init ", init_left_IR
-print "right_ir init ", init_right_IR
-print "init_ir_diff ", init_IR_diff
-'''
-
+##### MAIN LOOP! ##########
 while(True):
+	#stop()
+	#msleep(tick)
 	#read the sensor vals
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
-
-	#if we're about to hit a wall from the front, stop
-	if (front_IR_val > front_IR_thresh):
-		stop()
-
+	if (something_front(front_IR_val) and wall_side(left_IR_val) 
+			and wall_side(right_IR_val)):
+				print "DEAD END"
+				one_eighty()
 	else:
-		'''
-		#added stuff
-		if (right_IR_val > right_IR_threshold):
-			nudge_left()
-			print "Nudge left"
-		elif (left_IR_val > left_IR_threshold) :
-			nudge_right()
-			print "Nudge right"
-		else:
-			fwd()
-		'''
-		IR_diff = (right_IR_val - IR_normalize) - left_IR_val
-		
-		#print "left ir: ", left_IR_val
-		#print "right ir: ", right_IR_val
-		#print "IR_diff: ", IR_diff
-		
-		if (IR_diff < (init_IR_diff + (-1*IR_diff_thresh))):
-			print "Nudge right"
-			nudge_right()
-		elif (IR_diff > (init_IR_diff + IR_diff_thresh)):
-			print "Nudge left"
-			nudge_left()
-			
+		wobble_fwd(left_IR_val, right_IR_val, front_IR_val)
 		
 		
 	msleep(tick)
