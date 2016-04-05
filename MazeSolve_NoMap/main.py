@@ -1,7 +1,7 @@
 # Created on Thu March 31 2016
 
 from kovan import *
-import straight_maze_movement
+import straight_maze_movement as jake
 
 #numbers of the IR sensors
 IR_left = 5
@@ -52,10 +52,10 @@ def nudge_left():
 def turn_right(in_place=True):
 	#if in place, opposite motor goes backward
 	if in_place:
-		motor_right_vel = -1*speed
+		motor_right_vel = -1*speed_right
 	else:
 		motor_right_vel = 40
-	motor(motor_left, speed)
+	motor(motor_left, speed_left)
 	motor(motor_right, motor_right_vel)
 def turn_left(in_place=True):
 	if in_place:
@@ -96,10 +96,11 @@ def one_eighty():
 ##### MAIN LOOP! ##########
 while(True):
 	#read the sensor vals
-	'''
+	
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
+	'''
 	if (something_front(front_IR_val) and wall_side(left_IR_val) 
 			and wall_side(right_IR_val)):
 				print "DEAD END"
@@ -116,9 +117,11 @@ while(True):
 		motor(motor_left, 70)
 		#if we're about to hit a wall from the front, stop
 		if (front_IR_val > front_IR_thresh):
+			print "SOMETHING FRONT"
 			turn_right()
 		else:
-			stay_mid()
+			print "STAY MID"
+			jake.stay_mid()
 	if (a_button() or b_button() or c_button()):
 		ao()
 		break

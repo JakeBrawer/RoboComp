@@ -21,8 +21,9 @@ def stay_mid():
     if(right_IR_val > mid_thresh):
         motor(motor_left,100*(right_IR_val/800))
 
-
+'''
 while(True):
     motor(motor_right, 70)
     motor(motor_left, 70)
     stay_mid()
+'''
