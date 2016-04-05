@@ -15,14 +15,11 @@ front_IR_val = analog_et(IR_front)
 def stay_mid():
     left_IR_val = analog_et(IR_left)
     right_IR_val = analog_et(IR_right)
-<<<<<<< HEAD
     print('Left IR: %s,  Right IR: %s' % (left_IR_val, right_IR_val))
-=======
->>>>>>> cf3443df8269ffb48fe3c270874d380690809b84
     if(left_IR_val > mid_thresh ):
-        motor(motor_right,100*(left_IR_val/700))
+        motor(motor_right,100*(left_IR_val/800))
     if(right_IR_val > mid_thresh):
-        motor(motor_left,100*(right_IR_val/700))
+        motor(motor_left,100*(right_IR_val/800))
 
 
 while(True):
