@@ -17,7 +17,7 @@ IR_normalize = 0
 IR_diff_thresh = 40
 IR_thresh_collision = 480
 IR_thresh_wall = 300
-front_IR_thresh = 410#420
+front_IR_thresh = 430#420
 
 speed = 60
 speed_right = 63
@@ -93,6 +93,8 @@ def one_eighty():
 	msleep(1200)
 	stop()
 
+motor_out_left = 0
+motor_out_right = 0
 ##### MAIN LOOP! ##########
 while(True):
 	#read the sensor vals
@@ -113,8 +115,8 @@ while(True):
 				print "DEAD END"
 				one_eighty()
 	else:
-		motor(motor_right, 70)
-		motor(motor_left, 70)
+		#motor(motor_right, 70)
+		#motor(motor_left, 70)
 		#if we're about to hit a wall from the front, stop
 		if (front_IR_val > front_IR_thresh):
 			print "SOMETHING FRONT"
