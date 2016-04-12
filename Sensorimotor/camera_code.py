@@ -10,6 +10,7 @@ def calculateStdError(list_of_vals, average):
     stddev = 0.0
     diffsquared = 0.0
     sum_diffsquared = 0.0
+    #need to initialize stderror before?
     for val in list_of_vals:
         diffsquared = (val- average)**2.0
         sum_diffsquared += diffsquared 
@@ -51,5 +52,10 @@ def calculateBlackBlobs():
     stderr_black_blob = calculateStdError(average_black_blobs_list, average_black_blob)    	  
     camera_close()
     return average_black_blob, stderr_black_blob
+    
+    # if we find blobs that do not fit the upper and lower bounds something's going down
+    lower_black_blob_blound = average_black_blob - stderr_black_blob
+    upper_black_blob_blound = average_black_blob + stderr_black_blob
 
-#print ("Average saved black blob: %s\nStd err: %s " %  (average_black_blob, stderr_black_blob)) 
+
+#print ("Average saved black blob: %s\nStd err: %s " %  (average_black_blob, stderr_black_blob))
