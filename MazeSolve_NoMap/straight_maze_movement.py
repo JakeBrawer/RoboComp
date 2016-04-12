@@ -14,6 +14,7 @@ front_IR_val = analog_et(IR_front)
 
 def stay_mid():
 	#put in da sigmoid func. (how do you do sigmoid)
+	#S(z) = 1/(1+e^-z) #math
 	
 	
     left_IR_val = analog_et(IR_left)
