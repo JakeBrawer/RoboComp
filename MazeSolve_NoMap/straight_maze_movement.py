@@ -1,4 +1,5 @@
 from kovan import *
+from scipy.special import expit
 
 #numbers of the IR sensors
 IR_left = 3
@@ -15,6 +16,11 @@ front_IR_val = analog_et(IR_front)
 def stay_mid():
 	#put in da sigmoid func. (how do you do sigmoid)
 	#S(z) = 1/(1+e^-z) #math
+	# ok so we input the ir values as the x values and that spits out y values that never go above or below a certain value. Why do we want that? Because we dont want our ir sensor values to go above or below a certain value so this limits them with an asymptote. We also want the motor to be very reactive. ooooh wait ok the y values will be the motor output? So ok wait. 
+	
+	motor(motor_right, (expit(left_IR_val)))
+	motor(motor_left, (expit(right_IR_val)))
+	
 	
 	
     left_IR_val = analog_et(IR_left)
