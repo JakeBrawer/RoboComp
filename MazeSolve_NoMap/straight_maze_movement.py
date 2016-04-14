@@ -13,6 +13,11 @@ motor_right = 1
 mid_thresh = 420
 front_IR_val = analog_et(IR_front)
 
+def sigmoid(array , deriv=False):
+    if(deriv==True):
+        return array*(1-array)
+    return 1/(1+np.exp(-array))
+
 def stay_mid():
 	#put in da sigmoid func. (how do you do sigmoid)
 	#S(z) = 1/(1+e^-z) #math
