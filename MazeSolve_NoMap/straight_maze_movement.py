@@ -62,11 +62,9 @@ class Expected:
 		
 	def checks_out(self, IR_left, IR_right, IR_front):
 		arr = [True, True, True]
-		if ((IR_left > (self.left_avg + self.left_err)) or 
-			(IR_left < (self.left_avg - self.left_err)):
+		if (IR_left < (self.left_avg - self.left_err)):
 				arr[0] = False
-		if ((IR_right > (self.right_avg + self.right_err)) or 
-			(IR_right < (self.right_avg - self.right_err)):
+		if (IR_right < (self.right_avg - self.right_err)):
 				arr[1] = False
 		if ((IR_front > (self.front_avg + self.front_err)) or 
 			(IR_front < (self.front_avg - self.front_err)):
