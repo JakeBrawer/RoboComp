@@ -58,7 +58,6 @@ def calculateBlackBlobs():
     else:
         #camera_close()
         return 0, 0
->>>>>>> e2f6272c360a8576c705c467fe5305ab568289d4
 
 
 #print ("Average saved black blob: %s\nStd err: %s " %  (average_black_blob, stderr_black_blob))
