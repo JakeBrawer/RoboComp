@@ -95,14 +95,19 @@ def one_eighty():
 
 motor_out_left = 0
 motor_out_right = 0
-
+expector = Expected()
+counter = 0
+arr = [True, True, True]
 ##### MAIN LOOP! ##########
 while(True):
+	counter += 1
+	arr = [True, True, True]
 	#read the sensor vals
 	
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
+	expector.update(left_IR_val, right_IR_val, front_IR_val)
 	'''
 	if (something_front(front_IR_val) and wall_side(left_IR_val) 
 			and wall_side(right_IR_val)):
@@ -123,8 +128,21 @@ while(True):
 			print "SOMETHING FRONT"
 			turn_right()
 		else:
+			if (counter > 5)
+				arr = expector.checks_out(left_IR_val, right_IR_val, front_IR_val)
 			print "STAY MID"
-			jake.stay_mid()
+			if (not arr[0]):
+				turn_left()
+				msleep(100)
+				fwd()
+				msleep(100)
+			elif (not arr[1]):
+				turn_right()
+				msleep(100)
+				fwd()
+				msleep(100)
+			else:
+				jake.stay_mid()
 	if (a_button() or b_button() or c_button()):
 		ao()
 		break
