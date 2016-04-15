@@ -1,13 +1,9 @@
 from kovan import *
-<<<<<<< HEAD
-import sys
-from scipy.special import expit
-sys.path.insert(0, '/home/jake/org/classes/RoboComp/Sensorimotor')
-from camera_code import calculateStdError
-=======
-#from scipy.special import expit
 
->>>>>>> fe2c5d724dfb942c300ebd4eb4e4c18372fca70a
+import sys
+sys.path.insert(0, '/Users/nb/desktop/RoboComp/Sensorimotor')
+from camera_code import calculateStdError
+
 #numbers of the IR sensors
 IR_left = 3
 IR_right = 5
@@ -27,22 +23,57 @@ def sigmoid(array , deriv=False):
         return array*(1-array)
     return 1/(1+numpy.exp(-array))
 
-def calculate_expected_vals(num_samples):
-        left_samples =[]
-        right_samples = []
-        front_samples = []
-        while(num_samples > 0):
-                left_samples.append(analog_et(IR_left))
-                right_samples.append(analog_et(IR_right))
-                front_samples.append(analog_et(IR_front))
-                msleep(200)
-                num_samples -= 1
-        left_avg = sum(left_samples)/len(left_samples)
-        right_avg = sum(right_samples)/len(right_samples)
-        front_avg = sum(front_samples)/len(front_samples)
-        return {"expected left": [left_avg, calculateStdError(left_samples, left_avg)],
-                     "expected right": [right_avg, calculateStdError(right_samples, right_avg)],
-                     "expected front":[front_avg, calculateStdError(front_samples, front_avg)] }
+class Expected:
+	def __init__(self):
+		self.left_avg = 0
+		self.right_avg = 0
+		self.front_avg = 0
+		self.left_samples = []
+		self.right_samples = []
+		self.front_samples = []
+		self.left_err = 0
+		self.right_err = 0
+		self.front_err = 0
+		
+	def calculateStdError(self, list_of_vals, average):
+		stddev = 0.0
+		diffsquared = 0.0
+		sum_diffsquared = 0.0
+		#need to initialize stderror before?
+		for val in list_of_vals:
+			diffsquared = (val- average)**2.0
+			sum_diffsquared += diffsquared 
+		stddev = math.sqrt((sum_diffsquared)/len(list_of_vals))
+		stderror = stddev / math.sqrt(len(list_of_vals))
+		return stderror
+	
+	def update(self, IR_left, IR_right, IR_front):
+		self.left_samples.append(IR_left)
+		self.right_samples.append(IR_right)
+		self.front_samples.append(IR_front)
+		
+		self.left_avg = sum(self.left_samples)/len(self.left_samples)
+		self.right_avg = sum(self.right_samples)/len(self.right_samples)
+		self.front_avg = sum(self.front_samples)/len(self.front_samples)
+		
+		self.left_err = self.calculateStdError(self.left_samples, self.left_avg)
+		self.right_err = self.calculateStdError(self.right_samples, self.right_avg)
+		self.front_err = self.calculateStdError(self.front_samples, self.front_avg)
+		
+	def checks_out(self, IR_left, IR_right, IR_front):
+		arr = [True, True, True]
+		if ((IR_left > (self.left_avg + self.left_err)) or 
+			(IR_left < (self.left_avg - self.left_err)):
+				arr[0] = False
+		if ((IR_right > (self.right_avg + self.right_err)) or 
+			(IR_right < (self.right_avg - self.right_err)):
+				arr[1] = False
+		if ((IR_front > (self.front_avg + self.front_err)) or 
+			(IR_front < (self.front_avg - self.front_err)):
+				arr[2] = False
+		return arr
+				
+
 def stay_mid():
 	#put in da sigmoid func. (how do you do sigmoid)
 	#S(z) = 1/(1+e^-z) #math
