@@ -32,33 +32,6 @@ def calculateBlackBlobs():
         print("camera_update()....")
         camera_update()# Take a snapshot
         # Counts the number of black blobs seen in snapshot
-<<<<<<< HEAD
-        object_count = get_object_count(black_channel)
-        # Stores sums to calculates averages
-        sum_area_black_blobs = 0
-        #loops through each blob detected and calculates area
-        for i in range(0, object_count):
-            sum_area_black_blobs += get_object_area(black_channel, i)
-        # calculates and stores average total area takwn up by blobs
-        if (not (object_count == 0)):
-            average_black_blobs_list.append(sum_area_black_blobs/ object_count)
-        else: 
-            print "NO OBJECTS!"
-        num_samples -= 1
-        #Sleep for 1 second. Will allow the bot to move around the room
-        # and take samples
-        # NOTE: if sleep does not work, try wheel ticks
-        print "Average black blobs in sample", average_black_blobs_list
-        msleep(1000)
-    average_black_blob = sum(average_black_blobs_list)/float(len(average_black_blobs_list))
-    stderr_black_blob = calculateStdError(average_black_blobs_list, average_black_blob)    	  
-    camera_close()
-    return average_black_blob, stderr_black_blob
-    
-    # if we find blobs that do not fit the upper and lower bounds something's going down
-    lower_black_blob_blound = average_black_blob - stderr_black_blob
-    upper_black_blob_blound = average_black_blob + stderr_black_blob
-=======
         object_count = get_object_count(0)
         if object_count > 0:
 			print "OBJECT COUNT: ", object_count
