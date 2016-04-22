@@ -50,7 +50,7 @@ while(True):
 				# NOTE: if sleep does not work, try wheel ticks
 				print "Average black blobs in sample", average_black_blobs_list
 				msleep(500)
-		if (not (len(average_black_blobs_list) > 5)):
+		if (len(average_black_blobs_list) == 5):
 			try:
 				average_black_blob = sum(average_black_blobs_list)/float(len(average_black_blobs_list))
 				stderr_black_blob = calculateStdError(average_black_blobs_list, average_black_blob)
@@ -58,7 +58,7 @@ while(True):
 				pass
 			#camera_close()
 			#return average_black_blob, stderr_black_blob
-		else:
+		if object_count < average_black_blob - stderr_black_blob:
 			#camera_close()
-			print('hell0')
+			print('NEW OBJECT')
 
