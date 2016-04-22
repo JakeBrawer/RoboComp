@@ -9,8 +9,8 @@ IR_right = 3
 IR_front = 0
 
 #numbers of motor ports
-motor_left = 3
-motor_right = 1
+motor_left = 1
+motor_right = 3
 
 
 IR_normalize = 0
@@ -128,7 +128,8 @@ while(True):
 			print "SOMETHING FRONT"
 			turn_right()
 		else:
-			if (counter > 5):
+			'''
+			if (counter > 15):
 				arr = expector.checks_out(left_IR_val, right_IR_val, front_IR_val)
 			print "STAY MID"
 			if (not arr[0]):
@@ -142,7 +143,8 @@ while(True):
 				fwd()
 				msleep(100)
 			else:
-				jake.stay_mid()
+			'''
+			jake.stay_mid()
 	if (a_button() or b_button() or c_button()):
 		ao()
 		break
