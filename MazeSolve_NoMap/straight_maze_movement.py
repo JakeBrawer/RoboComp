@@ -1,8 +1,9 @@
 from kovan import *
 
 import sys
-sys.path.insert(0, '/Users/nb/desktop/RoboComp/Sensorimotor')
+#sys.path.insert(0, '/Users/nb/desktop/RoboComp/Sensorimotor')
 from camera_code import calculateStdError
+import math
 
 #numbers of the IR sensors
 IR_left = 3
@@ -66,8 +67,7 @@ class Expected:
 				arr[0] = False
 		if (IR_right < (self.right_avg - self.right_err)):
 				arr[1] = False
-		if ((IR_front > (self.front_avg + self.front_err)) or 
-			(IR_front < (self.front_avg - self.front_err)):
+		if ((IR_front > (self.front_avg + self.front_err)) or (IR_front < (self.front_avg - self.front_err))):
 				arr[2] = False
 		return arr
 				

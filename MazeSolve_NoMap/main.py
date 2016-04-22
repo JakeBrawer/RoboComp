@@ -95,7 +95,7 @@ def one_eighty():
 
 motor_out_left = 0
 motor_out_right = 0
-expector = Expected()
+expector = jake.Expected()
 counter = 0
 arr = [True, True, True]
 ##### MAIN LOOP! ##########
@@ -128,7 +128,7 @@ while(True):
 			print "SOMETHING FRONT"
 			turn_right()
 		else:
-			if (counter > 5)
+			if (counter > 5):
 				arr = expector.checks_out(left_IR_val, right_IR_val, front_IR_val)
 			print "STAY MID"
 			if (not arr[0]):
