@@ -135,13 +135,13 @@ while(True):
 			if (not arr[0]):
 				turn_left()
 				msleep(100)
-				fwd()
-				msleep(100)
+				ao()
+				break
 			elif (not arr[1]):
 				turn_right()
 				msleep(100)
-				fwd()
-				msleep(100)
+				ao()
+				break
 			else:
 			'''
 			jake.stay_mid()
