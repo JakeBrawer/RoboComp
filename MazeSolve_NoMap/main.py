@@ -92,6 +92,16 @@ def one_eighty():
 	turn_left()
 	msleep(1200)
 	stop()
+def turn_lowest(left_IR, right_IR):
+	if (left_IR < right_IR):
+		turn_left()
+		msleep(600)
+		stop()
+	else:
+		turn_right()
+		msleep(600)
+		stop()
+
 
 motor_out_left = 0
 motor_out_right = 0
@@ -140,15 +150,16 @@ while(True):
 				arr = expector.checks_out(local_averager.left_avg, local_averager.right_avg, local_averager.front_avg)
 			print "STAY MID"
 			if (not arr[0]):
-				turn_left()
-				msleep(100)
-				ao()
-				break
+				#turn to the side with the lowest reading, set
+				#up a new predictor, and reset the counter so
+				#that the predictor has training time
+				turn_lowest(left_IR_val, right_IR_val)
+				expector = jake.Expected()
+				counter = 0
 			elif (not arr[1]):
-				turn_right()
-				msleep(100)
-				ao()
-				break
+				turn_lowest(left_IR_val, right_IR_val)
+				expector = jake.Expected()
+				counter = 0
 			else:
 				jake.stay_mid()
 	if (a_button() or b_button() or c_button()):
