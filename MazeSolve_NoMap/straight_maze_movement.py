@@ -10,6 +10,10 @@ IR_left = 3
 IR_right = 5
 IR_front = 0
 
+# ports for bump sensors
+bump_left = 14
+bump_right = 15
+
 #numbers of motor ports
 motor_left = 3
 motor_right = 1
@@ -165,3 +169,23 @@ def stay_mid():
 	motor(motor_left,int(left))
    
 
+def bump():
+    global bump_left,bump_right
+    left_bump = analog_et(bump_left)
+    right_bump = analog_et(bump_right)
+    if left_bump == 1:
+        #Move back for a bit
+        motor(motor_left, 60)
+        motor(motor_right, 60)
+        msleep(800)
+        # Turn towards the right
+        motor(motor_right, -60)
+        msleep(600)
+    if right_bump == 1:
+        #Move back for a bit
+        motor(motor_left, 60)
+        motor(motor_right, 60)
+        msleep(800)
+        # Turn towards the right
+        motor(motor_left, -60)
+        msleep(600)
