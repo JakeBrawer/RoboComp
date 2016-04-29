@@ -12,6 +12,9 @@ IR_front = 0
 motor_left = 1
 motor_right = 3
 
+# ports for bump sensors
+bump_left = 14
+bump_right = 15
 
 IR_normalize = 0
 IR_diff_thresh = 40
@@ -116,7 +119,7 @@ while(True):
 	counter += 1
 	arr = [True, True, True]
 	#read the sensor vals
-	
+	bump()
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
