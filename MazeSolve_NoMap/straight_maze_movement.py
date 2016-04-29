@@ -70,7 +70,75 @@ class Expected:
 		if ((IR_front > (self.front_avg + self.front_err)) or (IR_front < (self.front_avg - self.front_err))):
 				arr[2] = False
 		return arr
+		
+	def printer(self):
+		print "self.left_avg ", self.left_avg
+		print "self.left_err ", self.left_err
+		print "self.right_avg ", self.right_avg
+		print "self.right_err ", self.right_err
+		print "self.front_avg ", self.front_avg
+		print "self.front_err ", self.front_err
 				
+class localExpector:
+	def __init__(self, drop_rate):
+		self.left_avg = 0
+		self.right_avg = 0
+		self.front_avg = 0
+		self.left_samples = []
+		self.right_samples = []
+		self.front_samples = []
+		self.left_err = 0
+		self.right_err = 0
+		self.front_err = 0
+		
+		self.drop_rate = drop_rate
+		
+	def calculateStdError(self, list_of_vals, average):
+		stddev = 0.0
+		diffsquared = 0.0
+		sum_diffsquared = 0.0
+		#need to initialize stderror before?
+		for val in list_of_vals:
+			diffsquared = (val- average)**2.0
+			sum_diffsquared += diffsquared 
+		stddev = math.sqrt((sum_diffsquared)/len(list_of_vals))
+		stderror = stddev / math.sqrt(len(list_of_vals))
+		return stderror
+	
+	def update(self, IR_left, IR_right, IR_front):
+		self.left_samples.append(IR_left)
+		self.right_samples.append(IR_right)
+		self.front_samples.append(IR_front)
+		if (len(self.left_samples) >= self.drop_rate):
+			self.left_samples.pop(0)
+			self.right_samples.pop(0)
+			self.front_samples.pop(0)
+		
+		self.left_avg = sum(self.left_samples)/len(self.left_samples)
+		self.right_avg = sum(self.right_samples)/len(self.right_samples)
+		self.front_avg = sum(self.front_samples)/len(self.front_samples)
+		
+		self.left_err = self.calculateStdError(self.left_samples, self.left_avg)
+		self.right_err = self.calculateStdError(self.right_samples, self.right_avg)
+		self.front_err = self.calculateStdError(self.front_samples, self.front_avg)
+		
+	def checks_out(self, IR_left, IR_right, IR_front):
+		arr = [True, True, True]
+		if (IR_left < (self.left_avg - self.left_err)):
+				arr[0] = False
+		if (IR_right < (self.right_avg - self.right_err)):
+				arr[1] = False
+		if ((IR_front > (self.front_avg + self.front_err)) or (IR_front < (self.front_avg - self.front_err))):
+				arr[2] = False
+		return arr
+	
+	def printer(self):
+		print "self.left_avg ", self.left_avg
+		print "self.left_err ", self.left_err
+		print "self.right_avg ", self.right_avg
+		print "self.right_err ", self.right_err
+		print "self.front_avg ", self.front_avg
+		print "self.front_err ", self.front_err
 
 def stay_mid():
 	

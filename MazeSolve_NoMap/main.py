@@ -4,8 +4,8 @@ from kovan import *
 import straight_maze_movement as jake
 
 #numbers of the IR sensors
-IR_left = 5
-IR_right = 3
+IR_left = 3
+IR_right = 5
 IR_front = 0
 
 #numbers of motor ports
@@ -24,7 +24,7 @@ speed_right = 63
 speed_left = 73
 
 #number of milliseconds between each loop
-tick = 30
+tick = 69
 
 	
 nudge_dec = 20
@@ -98,6 +98,9 @@ motor_out_right = 0
 expector = jake.Expected()
 counter = 0
 arr = [True, True, True]
+
+local_averager_rate = 6
+local_averager = jake.localExpector(local_averager_rate)
 ##### MAIN LOOP! ##########
 while(True):
 	counter += 1
@@ -108,6 +111,11 @@ while(True):
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
 	expector.update(left_IR_val, right_IR_val, front_IR_val)
+	local_averager.update(left_IR_val, right_IR_val, front_IR_val)
+	print "EXPECTOR"
+	expector.printer()
+	print "REALITY"
+	local_averager.printer()
 	'''
 	if (something_front(front_IR_val) and wall_side(left_IR_val) 
 			and wall_side(right_IR_val)):
@@ -128,9 +136,8 @@ while(True):
 			print "SOMETHING FRONT"
 			turn_right()
 		else:
-			'''
-			if (counter > 15):
-				arr = expector.checks_out(left_IR_val, right_IR_val, front_IR_val)
+			if (counter > 50):
+				arr = expector.checks_out(local_averager.left_avg, local_averager.right_avg, local_averager.front_avg)
 			print "STAY MID"
 			if (not arr[0]):
 				turn_left()
@@ -143,8 +150,7 @@ while(True):
 				ao()
 				break
 			else:
-			'''
-			jake.stay_mid()
+				jake.stay_mid()
 	if (a_button() or b_button() or c_button()):
 		ao()
 		break
