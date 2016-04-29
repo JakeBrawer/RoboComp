@@ -2,6 +2,7 @@
 
 from kovan import *
 import straight_maze_movement as jake
+import camera_code as cam
 
 #numbers of the IR sensors
 IR_left = 3
@@ -97,14 +98,26 @@ def one_eighty():
 	stop()
 def turn_lowest(left_IR, right_IR):
 	if (left_IR < right_IR):
-		turn_left()
-		msleep(600)
-		stop()
-	else:
 		turn_right()
 		msleep(600)
 		stop()
-
+	else:
+		turn_left()
+		msleep(600)
+		stop()
+def approach_pac():
+	midpoint = 320
+	baseline = 60
+	pacman_channel = 1
+	x = get_object_center(pacman_channel, 0).x
+	if (x > midpoint):
+		print('pac to right')
+		motor(motor_left, int(baseline + (.5 * (x - 80))))
+		motor(motor_right, baseline)
+	else:
+		print('pac to left')
+		motor(motor_right, int(baseline + (.5 * (x - 80))))
+		motor(motor_left, baseline)
 
 motor_out_left = 0
 motor_out_right = 0
@@ -112,14 +125,18 @@ expector = jake.Expected()
 counter = 0
 arr = [True, True, True]
 
-local_averager_rate = 6
+local_averager_rate = 11
 local_averager = jake.localExpector(local_averager_rate)
+
+camera_open()
+#display_clear()
 ##### MAIN LOOP! ##########
+
+approach_counter = 0
 while(True):
 	counter += 1
 	arr = [True, True, True]
 	#read the sensor vals
-	bump()
 	front_IR_val = analog_et(IR_front)
 	left_IR_val = analog_et(IR_left)
 	right_IR_val = analog_et(IR_right)
@@ -129,15 +146,20 @@ while(True):
 	expector.printer()
 	print "REALITY"
 	local_averager.printer()
-	'''
-	if (something_front(front_IR_val) and wall_side(left_IR_val) 
-			and wall_side(right_IR_val)):
-				print "DEAD END"
-				one_eighty()
-	else:
-		wobble_fwd(left_IR_val, right_IR_val, front_IR_val)
-	'''
-	if (something_front(front_IR_val) and wall_side(left_IR_val) 
+	
+	left_bump = digital(bump_left)
+	right_bump = digital(bump_right)
+	
+	if (cam.detect_pacman()):
+		approach_counter = approach_counter + 1
+		if (approach_counter < 30):
+			approach_pac()
+		else:
+			ao()
+			break
+	elif (left_bump or right_bump):
+		jake.bump(left_bump, right_bump)
+	elif (something_front(front_IR_val) and wall_side(left_IR_val) 
 			and wall_side(right_IR_val)):
 				print "DEAD END"
 				one_eighty()

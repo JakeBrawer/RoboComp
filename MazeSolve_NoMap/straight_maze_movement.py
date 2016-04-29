@@ -164,28 +164,30 @@ def stay_mid():
 		right = CAP
 	if (left > CAP):
 		left = CAP
-	
-	motor(motor_right,int(right))
-	motor(motor_left,int(left))
+	if right < 40 and left < 40:
+		motor(motor_right, 60)
+		motor(motor_left, 60)
+	else:
+		motor(motor_right,int(right))
+		motor(motor_left,int(left))
    
 
-def bump():
-    global bump_left,bump_right
-    left_bump = analog_et(bump_left)
-    right_bump = analog_et(bump_right)
-    if left_bump == 1:
-        #Move back for a bit
-        motor(motor_left, 60)
-        motor(motor_right, 60)
-        msleep(800)
-        # Turn towards the right
-        motor(motor_right, -60)
-        msleep(600)
-    if right_bump == 1:
-        #Move back for a bit
-        motor(motor_left, 60)
-        motor(motor_right, 60)
-        msleep(800)
-        # Turn towards the right
-        motor(motor_left, -60)
-        msleep(600)
+def bump(left_bump_val, right_bump_val):
+	if left_bump_val == 1:
+		#Move back for a bit
+		motor(motor_left, -60)
+		motor(motor_right, -60)
+		msleep(800)
+		# Turn towards the right
+		motor(motor_left, 0)
+		motor(motor_right, -60)
+		msleep(600)
+	if right_bump_val == 1:
+		#Move back for a bit
+		motor(motor_left, -60)
+		motor(motor_right, -60)
+		msleep(800)
+		# Turn towards the right
+		motor(motor_left, -60)
+		motor(motor_right, 0)
+		msleep(600)

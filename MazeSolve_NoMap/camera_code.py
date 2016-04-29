@@ -6,6 +6,8 @@ average_black_blob = 0
 stderr_black_blob = 0
 black_channel = 0 #
 
+pacman_channel = 1
+
 def calculateStdError(list_of_vals, average):
     stddev = 0.0
     diffsquared = 0.0
@@ -58,6 +60,13 @@ def calculateBlackBlobs():
     else:
         #camera_close()
         return 0, 0
-
+		
+def detect_pacman():
+	global pacman_channel
+	camera_update()
+	object_count = get_object_count(pacman_channel)
+	return (object_count >= 1)
+	
+		
 
 #print ("Average saved black blob: %s\nStd err: %s " %  (average_black_blob, stderr_black_blob))
