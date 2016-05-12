@@ -6,9 +6,9 @@ from camera_code import calculateStdError
 import math
 
 #numbers of the IR sensors
-IR_left = 0
-IR_right = 6
-IR_front = 3
+IR_left = 3
+IR_right = 5
+IR_front = 0
 
 # ports for bump sensors
 bump_left = 14
@@ -144,11 +144,10 @@ class localExpector:
 		print "self.front_avg ", self.front_avg
 		print "self.front_err ", self.front_err
 
-def stay_mid(left_IR, right_IR):
-	motor_left = 0
-	motor_right = 0
-	left_IR_val = left_IR#analog_et(IR_left)
-	right_IR_val = right_IR#analog_et(IR_right)
+def stay_mid():
+	
+	left_IR_val = analog_et(IR_left)
+	right_IR_val = analog_et(IR_right)
 	print('Left IR: %s,  Right IR: %s' % (left_IR_val, right_IR_val))
 	
 	#how we found this constant:
@@ -163,23 +162,17 @@ def stay_mid(left_IR, right_IR):
 	#cap our outputs at the cap
 	if (right > CAP):
 		right = CAP
-		print "Right motor: ", right
 	if (left > CAP):
 		left = CAP
-		print "Left motor: ", left
-	if right < 50 and left < 50:
+	if right < 40 and left < 40:
 		motor(motor_right, 60)
-		print "Right motor: ", 60
-		motor(motor_left, 68)
-		print "Left motor: ", 68
+		motor(motor_left, 60)
 	else:
 		motor(motor_right,int(right))
-		print "Right motor: ", int(right)
 		motor(motor_left,int(left))
-		print "Left motor: ", int(left)
    
 
-def bump(left_bump_val, mid_val, right_bump_val):
+def bump(left_bump_val, right_bump_val):
 	if left_bump_val == 1:
 		#Move back for a bit
 		motor(motor_left, -60)
@@ -189,16 +182,7 @@ def bump(left_bump_val, mid_val, right_bump_val):
 		motor(motor_left, 0)
 		motor(motor_right, -60)
 		msleep(600)
-	elif right_bump_val == 1:
-		#Move back for a bit
-		motor(motor_left, -60)
-		motor(motor_right, -60)
-		msleep(800)
-		# Turn towards the right
-		motor(motor_left, -60)
-		motor(motor_right, 0)
-		msleep(600)
-	elif mid_val == 1:
+	if right_bump_val == 1:
 		#Move back for a bit
 		motor(motor_left, -60)
 		motor(motor_right, -60)
