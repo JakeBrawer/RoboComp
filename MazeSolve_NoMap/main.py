@@ -5,16 +5,17 @@ import straight_maze_movement as jake
 import camera_code as cam
 
 #numbers of the IR sensors
-IR_left = 3
-IR_right = 5
-IR_front = 0
+IR_left = 0
+IR_right = 6
+IR_front = 3
 
 #numbers of motor ports
 motor_left = 1
 motor_right = 3
 
 # ports for bump sensors
-bump_left = 14
+bump_left = 13
+bump_mid = 14
 bump_right = 15
 
 IR_normalize = 0
@@ -133,8 +134,14 @@ camera_open()
 ##### MAIN LOOP! ##########
 
 approach_counter = 0
+display_counter = 0
 while(True):
 	counter += 1
+	display_counter += 1
+	
+	if (display_counter > 1000):
+		console_clear() 
+	
 	arr = [True, True, True]
 	#read the sensor vals
 	front_IR_val = analog_et(IR_front)
@@ -143,13 +150,14 @@ while(True):
 	expector.update(left_IR_val, right_IR_val, front_IR_val)
 	local_averager.update(left_IR_val, right_IR_val, front_IR_val)
 	print "EXPECTOR"
-	expector.printer()
+	#expector.printer()
 	print "REALITY"
-	local_averager.printer()
+	#local_averager.printer()
 	
 	left_bump = digital(bump_left)
+	mid_bump = digital(bump_mid)
 	right_bump = digital(bump_right)
-	
+	'''
 	if (cam.detect_pacman()):
 		approach_counter = approach_counter + 1
 		if (approach_counter < 30):
@@ -157,8 +165,10 @@ while(True):
 		else:
 			ao()
 			break
-	elif (left_bump or right_bump):
-		jake.bump(left_bump, right_bump)
+	'''
+	#el
+	if (left_bump or right_bump or mid_bump):
+		jake.bump(left_bump, mid_bump, right_bump)
 	elif (something_front(front_IR_val) and wall_side(left_IR_val) 
 			and wall_side(right_IR_val)):
 				print "DEAD END"
@@ -167,14 +177,18 @@ while(True):
 		#motor(motor_right, 70)
 		#motor(motor_left, 70)
 		#if we're about to hit a wall from the front, stop
+		'''
 		if (front_IR_val > front_IR_thresh):
 			print "SOMETHING FRONT"
 			turn_right()
+		'''
+		if (False):
+			pass
 		else:
 			if (counter > 50):
 				arr = expector.checks_out(local_averager.left_avg, local_averager.right_avg, local_averager.front_avg)
-			print "STAY MID"
 			if (not arr[0]):
+				print "ANOMALY - TURN LOWEST"
 				#turn to the side with the lowest reading, set
 				#up a new predictor, and reset the counter so
 				#that the predictor has training time
@@ -182,11 +196,13 @@ while(True):
 				expector = jake.Expected()
 				counter = 0
 			elif (not arr[1]):
+				print "ANOMALY - TURN LOWEST"
 				turn_lowest(left_IR_val, right_IR_val)
 				expector = jake.Expected()
 				counter = 0
 			else:
-				jake.stay_mid()
+				print "STAY MID"
+				jake.stay_mid(local_averager.left_avg, local_averager.right_avg)
 	if (a_button() or b_button() or c_button()):
 		ao()
 		break
