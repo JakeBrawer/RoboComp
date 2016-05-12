@@ -126,10 +126,10 @@ expector = jake.Expected()
 counter = 0
 arr = [True, True, True]
 
-local_averager_rate = 11
+local_averager_rate = 50
 local_averager = jake.localExpector(local_averager_rate)
 
-camera_open()
+#camera_open()
 #display_clear()
 ##### MAIN LOOP! ##########
 
